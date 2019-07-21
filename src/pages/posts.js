@@ -22,12 +22,7 @@ export default class Posts extends React.Component {
                   {title}
                 </Link>
               </h3>
-              <small>{node.frontmatter.date}</small>
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: node.frontmatter.cription || node.excerpt,
-                }}
-              />
+              <p>{node.frontmatter.date}</p>
             </div>
           );
         })}
@@ -46,7 +41,6 @@ export const pageQuery = graphql`
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       edges {
         node {
-          excerpt
           fields {
             slug
           }
