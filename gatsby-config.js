@@ -16,13 +16,13 @@ module.exports = {
         name: `blog`,
       },
     },
-    /*{
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/assets`,
         name: `assets`,
       },
-    },*/
+    },
     {
       resolve: `gatsby-transformer-remark`,
       options: {
@@ -63,6 +63,7 @@ module.exports = {
         background_color: `#ffffff`,
         theme_color: `#663399`,
         display: `minimal-ui`,
+        icon: `./content/assets/baseline-code-24px.svg`,
       },
     },
     `gatsby-plugin-offline`,
