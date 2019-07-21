@@ -22,8 +22,6 @@ class BlogPostTemplate extends React.Component {
         <h1 className={styles.title}>{post.frontmatter.title}</h1>
         <p className={styles.date}>{post.frontmatter.date}</p>
         <div dangerouslySetInnerHTML={{ __html: post.html }} />
-        <hr />
-        <Bio />
         <Pagination previous={previous} next={next} />
       </Layout>
     );
