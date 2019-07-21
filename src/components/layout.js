@@ -26,16 +26,24 @@ class Layout extends React.Component {
           <div>
             <ul className={styles.social}>
               <li>
-                <FontAwesomeIcon icon={faLinkedin} />
-                <p>Linkedin</p>
+                <a href="https://www.linkedin.com/in/tony-le-16673a141">
+                  <FontAwesomeIcon icon={faLinkedin} />
+
+                  <p>Linkedin</p>
+                </a>
               </li>
               <li>
-                <FontAwesomeIcon icon={faGithubSquare} />
-                <p>Github</p>
+                <a href="https://github.com/let00">
+                  <FontAwesomeIcon icon={faGithubSquare} />
+                  <p>Github</p>
+                </a>
               </li>
               <li>
-                <FontAwesomeIcon icon={faEnvelopeSquare} />
-                <p>Email</p>
+                {/* TODO: mail spam prevention */}
+                <a href="mailto:tony.le@usa.com">
+                  <FontAwesomeIcon icon={faEnvelopeSquare} />
+                  <p>Email</p>
+                </a>
               </li>
             </ul>
           </div>
