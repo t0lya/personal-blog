@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, graphql } from 'gatsby';
 
-import Bio from '../components/bio';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 
@@ -9,15 +8,26 @@ class BlogIndex extends React.Component {
   render() {
     const { data } = this.props;
     const siteTitle = data.site.siteMetadata.title;
-    const posts = data.allMarkdownRemark.edges;
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
-        <SEO title="All posts" />
-        <Bio />
+        <SEO title="Home page" />
         <ul>
-          <li>Posts</li>
-          <li>Resume</li>
+          <li>
+            <h2>
+              <Link to="/posts">Posts</Link>
+            </h2>
+          </li>
+          <li>
+            <h2>
+              <a>Resume</a>
+            </h2>
+          </li>
+          <li>
+            <h2>
+              <Link to="/about">About</Link>
+            </h2>
+          </li>
         </ul>
       </Layout>
     );
@@ -31,21 +41,6 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
-      }
-    }
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
-      edges {
-        node {
-          excerpt
-          fields {
-            slug
-          }
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            title
-            description
-          }
-        }
       }
     }
   }
