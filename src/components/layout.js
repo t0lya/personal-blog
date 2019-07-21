@@ -29,7 +29,7 @@ class Layout extends React.Component {
                 <a
                   href="https://www.linkedin.com/in/tony-le-16673a141"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <FontAwesomeIcon icon={faLinkedin} />
 
@@ -40,7 +40,7 @@ class Layout extends React.Component {
                 <a
                   href="https://github.com/let00"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
                   <FontAwesomeIcon icon={faGithubSquare} />
                   <p>Github</p>
@@ -58,7 +58,11 @@ class Layout extends React.Component {
           <div>
             © {new Date().getFullYear()}, Built with
             {` `}
-            <a href="https://www.gatsbyjs.org" target="_blank" rel="noreferrer">
+            <a
+              href="https://www.gatsbyjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Gatsby
             </a>
           </div>

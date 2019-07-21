@@ -1,10 +1,10 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 
-import Bio from '../components/bio';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import Pagination from '../components/pagination';
+
 import styles from './blog-post.module.sass';
 
 class BlogPostTemplate extends React.Component {
@@ -21,7 +21,10 @@ class BlogPostTemplate extends React.Component {
         />
         <h1 className={styles.title}>{post.frontmatter.title}</h1>
         <p className={styles.date}>{post.frontmatter.date}</p>
-        <div dangerouslySetInnerHTML={{ __html: post.html }} />
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{ __html: post.html }}
+        />
         <Pagination previous={previous} next={next} />
       </Layout>
     );

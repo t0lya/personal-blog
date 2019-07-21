@@ -61,7 +61,7 @@ module.exports = {
         short_name: `Tony Le`,
         start_url: `/`,
         background_color: `#ffffff`,
-        theme_color: `#663399`,
+        theme_color: 'black',
         display: `minimal-ui`,
         icon: `./content/assets/baseline-code-24px.svg`,
       },
