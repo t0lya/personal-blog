@@ -27,12 +27,15 @@ class Layout extends React.Component {
             <ul className={styles.social}>
               <li>
                 <FontAwesomeIcon icon={faLinkedin} />
+                <p>Linkedin</p>
               </li>
               <li>
                 <FontAwesomeIcon icon={faGithubSquare} />
+                <p>Github</p>
               </li>
               <li>
                 <FontAwesomeIcon icon={faEnvelopeSquare} />
+                <p>Email</p>
               </li>
             </ul>
           </div>
