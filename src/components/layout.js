@@ -3,6 +3,7 @@ import { Link } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelopeSquare } from '@fortawesome/free-solid-svg-icons';
 import { faGithubSquare, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import 'prismjs/themes/prism-tomorrow.css';
 
 import styles from './layout.module.sass';
 

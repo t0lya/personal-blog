@@ -8,4 +8,8 @@ Gatsby is an open source framework based on React that builds static pages serve
 
 ### Initial Setup
 
-If you already have a Gatsby project and a Wordpress instance set up, you can skip this section.
+If you already have a Gatsby project and a Wordpress instance set up, you can skip this section `javascript±test code`.
+
+```javascript
+const code = null;
+```
