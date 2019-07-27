@@ -1,10 +1,12 @@
+require('dotenv').config();
+
 module.exports = {
   pathPrefix: `/blog`,
   siteMetadata: {
     title: `Tony Le`,
     author: `Tony Le`,
     description: `A personal blog with mostly coding stuff that I learned and found interesting enough to share with the world. Also, this is a playground for me to test Gatsby's features.`,
-    siteUrl: `https://gatsby-starter-blog-demo.netlify.com/`,
+    siteUrl: `https://www.tonyle.dev`,
     social: {
       twitter: 'n/a',
     },
@@ -53,12 +55,6 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        //trackingId: `ADD YOUR TRACKING ID HERE`,
-      },
-    },
     `gatsby-plugin-feed`,
     {
       resolve: `gatsby-plugin-manifest`,
@@ -78,7 +74,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: 'UA-136921853-2',
+        trackingId: process.env.GOOGLE_ANALYTICS_ID,
         head: true,
       },
     },
