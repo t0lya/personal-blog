@@ -4,7 +4,7 @@ description: 'How to enable preview of posts in Headless Wordpress stack using h
 date: '2019-07-30'
 ---
 
-Gatsby is an open source framework based on React that builds static pages server side, allowing lightning fast loading of web pages. Gatsby solves security, speed and SEO concerns that Wordpress sites may have, which makes it a popular solution for using Wordpress as a headless CMS. In this post I will show you how to preview your posts with Gatsby templates in the Wordpress Admin UI. The source code for the tutorial can be found [here](https://github.com/let00/headless-wordpress-preview).
+Gatsby is an open source framework based on React that builds static pages server side, allowing lightning fast loading of web pages. Gatsby solves security, speed and SEO concerns that Wordpress sites may have, which makes it a popular solution for using Wordpress as a headless CMS. In this post I will show you how to preview your posts with Gatsby templates in the Wordpress Admin UI. Check out the [source code](https://github.com/let00/headless-wordpress-preview) for the tutorial.
 
 ### Initial Setup
 
@@ -81,7 +81,7 @@ Now run `docker-compose up` in your terminal and go to `http://127.0.0.1` in you
 
 ### Connecting Wordpress and Gatsby with WPGraphQL
 
-We will use the WPGraphQL plugin to expose our Wordpress content through a GraphQL API. You can download the plugin [here](https://github.com/wp-graphql/wp-graphql/releases). Go to `http://127.0.0.1/wp-admin` and in the navigation bar go to **Plugins -> Add New** to install the zip file and activate the plugin. You will need set pretty permalinks (post name will do) under **Settings -> Permalinks**. Your GraphQL API should now be exposed under `http://127.0.0.1/graphql`.
+We will use the WPGraphQL plugin to expose our Wordpress content through a GraphQL API. [Download the plugin](https://github.com/wp-graphql/wp-graphql/releases) if you have not already. Go to `http://127.0.0.1/wp-admin` and in the navigation bar go to **Plugins -> Add New** to install the zip file and activate the plugin. You will need set pretty permalinks (post name will do) under **Settings -> Permalinks**. Your GraphQL API should now be exposed under `http://127.0.0.1/graphql`.
 
 Next, we will need to connect Gatsby to the GraphQL API. Run `npm install --save gatsby-source-graphql-universal` in your project's root directory. This plugin will allow us to retrieve data from the GraphQL API both during build time and during run time in the browser, as you will see later. Go to the `gatsby-config.js` file and add your plugin using the snippet below:
 
