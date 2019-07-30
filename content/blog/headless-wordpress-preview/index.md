@@ -1,10 +1,10 @@
 ---
-title: Preview in Headless Wordpress with Gatsby (WIP)
-description: 'How to enable preview of posts in Headless Wordpress stack using Gatsby rehydration'
-date: '2019-07-21'
+title: Preview in Headless Wordpress with Gatsby
+description: 'How to enable preview of posts in Headless Wordpress stack using hydration in Gatsby'
+date: '2019-07-30'
 ---
 
-Gatsby is an open source framework based on React that builds static pages server side, allowing lightning fast loading of web pages on browsers. Gatsby solves security, speed and SEO concerns that Wordpress sites may have, which makes it a popular solution for using Wordpress as a headless CMS. In this post I will show you how to enable the preview of posts in the Wordpress Admin UI when using Gatsby templates instead of your usual Wordpress ones. The source code for the tutorial can be found [here](https://github.com/let00/headless-wordpress-preview).
+Gatsby is an open source framework based on React that builds static pages server side, allowing lightning fast loading of web pages. Gatsby solves security, speed and SEO concerns that Wordpress sites may have, which makes it a popular solution for using Wordpress as a headless CMS. In this post I will show you how to preview your posts with Gatsby templates in the Wordpress Admin UI. The source code for the tutorial can be found [here](https://github.com/let00/headless-wordpress-preview).
 
 ### Initial Setup
 
@@ -134,7 +134,7 @@ Next edit the createPage API to create pages using Wordpress data:
 
 ```javascript
 // Create blog posts pages.
-const posts = result.data.wpgraphql.edges;
+const posts = result.data.wpgraphql.posts.edges;
 
 posts.forEach((post, index) => {
   const previous = index === posts.length - 1 ? null : posts[index + 1].node;
@@ -207,7 +207,6 @@ class BlogIndex extends React.Component {
     return (
       <Layout location={this.props.location} title={siteTitle}>
         <SEO title="All posts" />
-        <Bio />
         {posts.map(({ node }) => {
           const title = node.title || node.slug;
           return (
@@ -294,8 +293,6 @@ class BlogPostTemplate extends React.Component {
             marginBottom: rhythm(1),
           }}
         />
-        <Bio />
-
         <ul
           style={{
             display: `flex`,
@@ -328,16 +325,17 @@ class BlogPostTemplate extends React.Component {
 
 ### Hijacking the Preview Button in WP-Admin UI
 
-We need the preview button to redirect us to our Gatsby site instead of the default Wordpress site. The 'preview_post_link' hook comes to our rescue! Add the filter below in the `wordpress/wp-content/themes/twentynineteen/functions.php` file.
+We need the preview button to redirect us to our Gatsby site instead of the default Wordpress site. The 'preview_post_link' hook comes to our rescue! Add the filter below in the `wordpress/wp-content/themes/twentynineteen/functions.php` file. Note how we are passing the post slug and nonce. We will need it later for querying the post we want to preview. 
 
 ```php
-add_filter( 'preview_post_link', function( $link ) {
+add_filter('preview_post_link', function ($link) {
 	global $post;
 	$post_ID = $post->post_parent;
+	$post_slug = get_post_field( 'post_name', $post_id );
 	return 'http://localhost:8000/'
-        . 'preview?id='
-        . $post_ID . '&wpnonce='
-        . wp_create_nonce( 'wp_rest' );
+		. 'preview?slug='
+		. $post_slug . '&wpnonce='
+		. wp_create_nonce('wp_rest');
 });
 ```
 
@@ -347,6 +345,13 @@ Wordpress using nonces to authorize queries for post revisions/drafts. We will n
 add_filter( 'graphql_access_control_allow_headers', function( $headers ) {
 	return array_merge( $headers, [ 'x-wp-nonce' ] );
 });
+```
+
+We will also need to send our credentials stored in cookies set by Wordpress along with the nonce for authorization. Unfortunately, the CORS policy does not allow us to send credentials with `Access-Control-Allow-Origin` set to a wildcard. So head over to `wordpress/wp-content/plugins/wpgraphql/src/Router.php` and make the following change:
+
+```php
+'Access-Control-Allow-Origin'  => 'http://localhost:8000',
+'Access-Control-Allow-Credentials' => 'true',
 ```
 
 Next we need to create a client-side only preview route in the Gatsby site (`localhost:8000/preview`). Head to the `gatsby-node.js` file in root and add this Gatsby API:
@@ -371,11 +376,115 @@ Go to `src/pages` and create a `preview.js` file as below for your preview route
 
 ```javascript
 import React from 'react';
-import PostPreview from '../components/PostPreview';
+import BlogPostTemplate from '../templates/blog-post';
 
-export default function Preview(props) {
-  return <PostPreview search={props.location.search} />;
+export default function Preview() {
+  return <BlogPostTemplate />;
 }
 ```
 
-The preview route is created on build time, so we need to run `gatsby develop` again to see the route on our browser. If you click on the preview button in WP-Admin UI, you should be see a Gatsby page instead of the usual Wordpress one.
+The preview route is created on build time, so we need to run `gatsby develop` again to see the route on our browser. If you click on the preview button in WP-Admin UI, you should be see a Gatsby page instead of the usual Wordpress one (albeit with errors that we will fix in the next section).
+
+### Fetching Live Post Data for Preview
+
+Someone goes into Wordpress, clicks on a post and changes the content. How do we send the updated content to our Gatsby site? As I mentioned earlier, this is where the 'gatsby-source-graphql-universal' plugin will allow us to fetch live data from WPGraphQL. Of course, you can use other GraphQL clients such as Apollo Client, but I found this plugin much easier to set up. All you will need to do is wrap the Preview component with the `withGraphql` higher order component like so:
+
+```javascript
+import { withGraphql } from 'gatsby-source-graphql-universal'
+
+function Preview({ graphql }) {
+  return <BlogPostTemplate />;
+}
+
+export default withGraphql(Preview);
+```
+
+When someone changes a post's content, all its data is stored in a revision object. Fortunately for us, WPGraphQL exposes revisions so that we can query them client-side in Gatsby. Add the query below in `preview.js`:
+
+```javascript
+export const query = graphql`
+  query BlogTemplatePreviewQuery($slug: String!) {
+    wpgraphql {
+      postBy(slug: $slug) {
+        revisions(last: 1, before: null) {
+          nodes {
+            excerpt
+            content
+            title
+            date
+          }
+        }
+      }
+    }
+  }
+`;
+```
+
+Now we can use the `graphql` prop to fetch the data and then store it in the Preview component's state. We have the slug and nonce in the preview URL, so we can grab the post we want to preview. So run `npm install --save query-string`; this module will help us extract the slug and nonce. Then use a React hook to fetch when the component mounts:
+
+```javascript
+import React, { useEffect, useState } from 'react';
+import BlogPostTemplate from '../templates/blog-post';
+import { withGraphql } from 'gatsby-source-graphql-universal';
+import qs from 'query-string';
+import { graphql } from 'gatsby';
+
+function Preview({ graphql }) {
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const { slug, wpnonce } = qs.parse(location.search);
+      const context = {
+        headers: {
+          'X-WP-Nonce': wpnonce,
+        },
+        credentials: 'include',
+      };
+      try {
+        const { data } = await graphql('wpgraphql', {
+          query,
+          context,
+          variables: { slug },
+        });
+        setPost(data.postBy.revisions.nodes[0]);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        throw Error(error);
+      }
+    };
+    fetchPost();
+  }, []);
+
+  if (error !== null) {
+    return <span>{error}</span>;
+  }
+  if (loading) {
+    return <span>Loading...</span>;
+  }
+  return <BlogPostTemplate preview={post} location={'/preview'} />;
+}
+
+export default withGraphql(Preview);
+```
+
+We are passing the latest revision as a `preview` prop in the BlogPostTemplate. We need to adjust our `blog-post` template to use the revision data. Make the following changes in the BlogPostTemplate component:
+
+```javascript
+let post, siteTitle, previous, next;
+if (this.props.preview) {
+  post = this.props.preview;
+  siteTitle = 'Preview';
+  previous = null;
+  next = null;
+} else {
+  post = this.props.data.wpgraphql.postBy;
+  siteTitle = this.props.data.site.siteMetadata.title;
+  ({ previous, next } = this.props.pageContext);
+}
+```
+
+Great, we are finally done! Hopefully the preview feature is working for you. 
