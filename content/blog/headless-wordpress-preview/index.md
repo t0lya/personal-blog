@@ -325,7 +325,7 @@ class BlogPostTemplate extends React.Component {
 
 ### Hijacking the Preview Button in WP-Admin UI
 
-We need the preview button to redirect us to our Gatsby site instead of the default Wordpress site. The 'preview_post_link' hook comes to our rescue! Add the filter below in the `wordpress/wp-content/themes/twentynineteen/functions.php` file. Note how we are passing the post slug and nonce. We will need it later for querying the post we want to preview. 
+We need the preview button to redirect us to our Gatsby site instead of the default Wordpress site. The 'preview_post_link' hook comes to our rescue! Add the filter below in the `wordpress/wp-content/themes/twentynineteen/functions.php` file. Note how we are passing the post slug and nonce. We will need it later for querying the post we want to preview.
 
 ```php
 add_filter('preview_post_link', function ($link) {
@@ -347,11 +347,15 @@ add_filter( 'graphql_access_control_allow_headers', function( $headers ) {
 });
 ```
 
-We will also need to send our credentials stored in cookies set by Wordpress along with the nonce for authorization. Unfortunately, the CORS policy does not allow us to send credentials with `Access-Control-Allow-Origin` set to a wildcard. So head over to `wordpress/wp-content/plugins/wpgraphql/src/Router.php` and make the following change:
+We will also need to send our credentials stored in cookies set by Wordpress along with the nonce for authorization. Unfortunately, the CORS policy does not allow us to send credentials with `Access-Control-Allow-Origin` set to a wildcard. So add this extra filter in `functions.php`:
 
 ```php
-'Access-Control-Allow-Origin'  => 'http://localhost:8000',
-'Access-Control-Allow-Credentials' => 'true',
+add_filter( 'graphql_response_headers_to_send', function( $headers ) {
+	return array_merge( $headers, [
+		'Access-Control-Allow-Origin'  => 'http://localhost:8000',
+		'Access-Control-Allow-Credentials' => 'true'
+	] );
+} );
 ```
 
 Next we need to create a client-side only preview route in the Gatsby site (`localhost:8000/preview`). Head to the `gatsby-node.js` file in root and add this Gatsby API:
@@ -390,7 +394,7 @@ The preview route is created on build time, so we need to run `gatsby develop` a
 Someone goes into Wordpress, clicks on a post and changes the content. How do we send the updated content to our Gatsby site? As I mentioned earlier, this is where the 'gatsby-source-graphql-universal' plugin will allow us to fetch live data from WPGraphQL. Of course, you can use other GraphQL clients such as Apollo Client, but I found this plugin much easier to set up. All you will need to do is wrap the Preview component with the `withGraphql` higher order component like so:
 
 ```javascript
-import { withGraphql } from 'gatsby-source-graphql-universal'
+import { withGraphql } from 'gatsby-source-graphql-universal';
 
 function Preview({ graphql }) {
   return <BlogPostTemplate />;
@@ -487,4 +491,4 @@ if (this.props.preview) {
 }
 ```
 
-Great, we are finally done! Hopefully the preview feature is working for you. 
+Great, we are finally done! Hopefully the preview feature is working for you.
