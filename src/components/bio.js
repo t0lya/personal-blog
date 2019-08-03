@@ -27,14 +27,15 @@ const Bio = () => {
   const { author, social } = data.site.siteMetadata;
   return (
     <div className={styles.container}>
-      <span>
+      <p>
         <strong>
           Software Engineer Intern at Kabbage based in Atlanta, GA.
         </strong>
-      </span>
+      </p>
       <p>
         Currently working on headless CMS solutions using GatsbyJS and
-        Wordpress.
+        Wordpress. I will mainly post tutorials here for things that I have
+        worked on that I feel like are worth sharing.
       </p>
     </div>
   );
