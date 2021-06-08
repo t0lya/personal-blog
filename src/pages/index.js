@@ -20,13 +20,6 @@ class BlogIndex extends React.Component {
           </li>
           <li>
             <h2>
-              <a href={data.file.publicURL} rel="noopener noreferrer">
-                Resume
-              </a>
-            </h2>
-          </li>
-          <li>
-            <h2>
               <Link to="/about">About</Link>
             </h2>
           </li>
@@ -44,9 +37,6 @@ export const pageQuery = graphql`
       siteMetadata {
         title
       }
-    }
-    file(name: { eq: "Resume 2019" }) {
-      publicURL
     }
   }
 `;
