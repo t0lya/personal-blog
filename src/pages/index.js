@@ -1,29 +1,51 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { Link, graphql } from 'gatsby';
 
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 
-class HomePage extends React.Component {
-  render() {
-    return (
-      <Layout>
-        <SEO title="Home page" />
-        <ul>
-          <li>
-            <h2>
-              <Link to="/posts">Posts</Link>
-            </h2>
-          </li>
-          <li>
-            <h2>
-              <Link to="/about">About</Link>
-            </h2>
-          </li>
-        </ul>
-      </Layout>
-    );
-  }
-}
+const HomePage = ({
+  data: {
+    allMarkdownRemark: { edges },
+  },
+}) => {
+  return (
+    <Layout>
+      <SEO title="Home page" />
+      {edges.map(({ node }) => {
+        const title = node.frontmatter.title || node.fields.slug;
+        return (
+          <div key={node.fields.slug}>
+            <h3>
+              <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
+                {title}
+              </Link>
+            </h3>
+            <p>{node.frontmatter.date}</p>
+          </div>
+        );
+      })}
+    </Layout>
+  );
+};
 
 export default HomePage;
+
+export const pageQuery = graphql`
+  query {
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+      edges {
+        node {
+          fields {
+            slug
+          }
+          frontmatter {
+            date(formatString: "MMMM DD, YYYY")
+            title
+            description
+          }
+        }
+      }
+    }
+  }
+`;

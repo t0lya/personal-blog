@@ -21,8 +21,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/assets`,
-        name: `assets`,
+        path: `${__dirname}/src/images`,
+        name: `images`,
       },
     },
     {
@@ -54,17 +54,16 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    `gatsby-plugin-feed`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Tony Le Blog`,
+        name: `Tony Le's Blog`,
         short_name: `Tony Le`,
         start_url: `/`,
         background_color: `#ffffff`,
         theme_color: 'black',
         display: `minimal-ui`,
-        icon: `./content/assets/baseline-code-24px.svg`,
+        icon: `./src/images/baseline-code-24px.svg`,
       },
     },
     `gatsby-plugin-offline`,

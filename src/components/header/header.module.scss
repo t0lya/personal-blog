@@ -1,0 +1,102 @@
+@import '../../styles/mixins.scss';
+@import '../../styles/constants.scss';
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: white;
+  height: $header-height;
+  padding: 0 40px;
+  border-bottom: solid 0.5px;
+  border-color: DarkGray;
+  overflow: hidden;
+
+  & > div {
+    @include respond(tab-land) {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &-expanded {
+    height: min-content;
+    transition: height 0.1s;
+  }
+}
+
+.top-bar {
+  height: $header-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 15px;
+    font-size: 20px;
+  }
+}
+
+.hamburger {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+
+  @include respond(tab-land) {
+    display: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.dropdown {
+  margin: 25px;
+  display: none;
+
+  @include respond(tab-port) {
+    display: flex;
+    justify-content: space-between;
+
+    & > * {
+      flex-grow: 1;
+    }
+  }
+
+  @include respond(tab-land) {
+    margin: 0;
+    display: block;
+    align-items: center;
+  }
+
+  &-expanded {
+    display: block;
+  }
+}
+
+.menu {
+  font-size: 16px;
+
+  @include respond(tab-land) {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    & > *:not(:last-child) {
+      margin: 0 60px 0 0;
+    }
+  }
+
+  svg {
+    margin-right: 7px;
+    font-size: 16px;
+  }
+}

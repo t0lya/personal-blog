@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'gatsby';
+
 import styles from './pagination.module.scss';
 
 export default function Pagination({ previous, next }) {
