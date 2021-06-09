@@ -12,19 +12,21 @@ const HomePage = ({
   return (
     <Layout>
       <SEO title="Home page" />
-      {edges.map(({ node }) => {
-        const title = node.frontmatter.title || node.fields.slug;
-        return (
-          <div key={node.fields.slug}>
-            <h3>
-              <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
-                {title}
-              </Link>
-            </h3>
-            <p>{node.frontmatter.date}</p>
-          </div>
-        );
-      })}
+      <ul>
+        {edges.map(({ node }) => {
+          const title = node.frontmatter.title || node.fields.slug;
+          return (
+            <li key={node.fields.slug}>
+              <h3>
+                <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
+                  {title}
+                </Link>
+              </h3>
+              <p>{node.frontmatter.date}</p>
+            </li>
+          );
+        })}
+      </ul>
     </Layout>
   );
 };
