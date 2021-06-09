@@ -5,7 +5,7 @@ import Layout from '../components/layout';
 import SEO from '../components/seo';
 import Pagination from '../components/pagination';
 
-import styles from './blog-post.module.sass';
+import styles from './blog-post.module.scss';
 
 class BlogPostTemplate extends React.Component {
   render() {

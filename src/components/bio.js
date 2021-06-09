@@ -8,7 +8,7 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 
-import styles from './bio.module.sass';
+import styles from './bio.module.scss';
 
 const Bio = () => {
   const data = useStaticQuery(graphql`

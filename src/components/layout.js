@@ -5,7 +5,7 @@ import { faEnvelopeSquare } from '@fortawesome/free-solid-svg-icons';
 import { faGithubSquare, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import 'prismjs/themes/prism-tomorrow.css';
 
-import styles from './layout.module.sass';
+import styles from './layout.module.scss';
 
 class Layout extends React.Component {
   render() {
