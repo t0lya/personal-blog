@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'gatsby';
 
-import styles from './pagination.module.scss';
+import { pagination } from './pagination.module.scss';
 
 export default function Pagination({ previous, next }) {
   return (
-    <ul className={styles.pagination}>
+    <ul className={pagination}>
       <li>
         {previous && (
           <Link to={previous.fields.slug} rel="prev">
