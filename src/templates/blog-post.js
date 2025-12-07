@@ -5,7 +5,7 @@ import Layout from '../components/layout';
 import SEO from '../components/seo';
 import Pagination from '../components/pagination';
 
-import styles from './blog-post.module.scss';
+import { title, date, content } from './blog-post.module.scss';
 
 class BlogPostTemplate extends React.Component {
   render() {
@@ -18,10 +18,10 @@ class BlogPostTemplate extends React.Component {
           title={post.frontmatter.title}
           description={post.frontmatter.description || post.excerpt}
         />
-        <h1 className={styles.title}>{post.frontmatter.title}</h1>
-        <p className={styles.date}>{post.frontmatter.date}</p>
+        <h1 className={title}>{post.frontmatter.title}</h1>
+        <p className={date}>{post.frontmatter.date}</p>
         <div
-          className={styles.content}
+          className={content}
           dangerouslySetInnerHTML={{ __html: post.html }}
         />
         <Pagination previous={previous} next={next} />

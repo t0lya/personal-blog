@@ -1,5 +1,5 @@
-@import '../../styles/mixins.scss';
-@import '../../styles/constants.scss';
+@use '../../styles/mixins' as *;
+@use '../../styles/constants' as *;
 
 body {
   font-family: Arial, Helvetica, sans-serif;

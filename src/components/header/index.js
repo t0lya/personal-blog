@@ -11,8 +11,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithubSquare, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
-import styles from './header.module.scss';
-import logo from '../../images/baseline-code-24px.svg';
+import {
+  header,
+  headerExpanded,
+  topBar,
+  logo,
+  hamburger,
+  dropdown,
+  dropdownExpanded,
+  menu,
+} from './header.module.scss';
+import siteLogo from '../../images/baseline-code-24px.svg';
 
 const Header = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -24,8 +33,8 @@ const Header = ({ children }) => {
 
   return (
     <header
-      className={cx(styles.header, {
-        [styles.headerExpanded]: isExpanded,
+      className={cx(header, {
+        [headerExpanded]: isExpanded,
       })}
       ref={containerRef}
     >
@@ -34,13 +43,13 @@ const Header = ({ children }) => {
           setIsExpanded(false);
         }}
       >
-        <div className={styles.topBar}>
-          <Link className={styles.logo} to="/">
-            <img src={logo} alt="" />
+        <div className={topBar}>
+          <Link className={logo} to="/">
+            <img src={siteLogo} alt="" />
             <span>Tony Le</span>
           </Link>
           <button
-            className={styles.hamburger}
+            className={hamburger}
             onClick={onHamburgerClick}
             type="button"
             aria-label="Navigation Menu"
@@ -49,11 +58,11 @@ const Header = ({ children }) => {
           </button>
         </div>
         <div
-          className={cx(styles.dropdown, {
-            [styles.dropdownExpanded]: isExpanded,
+          className={cx(dropdown, {
+            [dropdownExpanded]: isExpanded,
           })}
         >
-          <ul className={styles.menu}>
+          <ul className={menu}>
             <li>
               <a
                 href="https://www.linkedin.com/in/tony-le-16673a141"
