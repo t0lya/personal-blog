@@ -66,16 +66,21 @@ module.exports = {
         icon: `./src/images/baseline-code-24px.svg`,
       },
     },
-    `gatsby-plugin-offline`,
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-sass`,
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        trackingId: process.env.GOOGLE_ANALYTICS_ID,
-        head: true,
-      },
-    },
+    ...(process.env.GOOGLE_ANALYTICS_ID
+      ? [
+          {
+            resolve: `gatsby-plugin-google-gtag`,
+            options: {
+              trackingIds: [process.env.GOOGLE_ANALYTICS_ID],
+              pluginConfig: {
+                head: true,
+              },
+            },
+          },
+        ]
+      : []),
     `gatsby-plugin-sitemap`,
   ],
 };
